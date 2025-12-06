@@ -1,0 +1,30 @@
+#map-layout {
+    display: flex;
+    margin: auto;
+    margin-top: 6%;
+}
+
+#map-sidebar {
+    width: 120px;
+    background: #FAEBDD;
+    font-family:var(--texte-font);
+    font-size:x-large;
+    color: rgb(9, 33, 40);
+    
+}
+
+#map {
+    height: 600px ;
+    width: 800px ;
+}
+
+.map-title {
+    color: rgb(9, 33, 40);
+    position: absolute;
+    top: 7%;
+    left: 185px; 
+    padding-top: 20px ;
+    font-family: var(--texte-font);
+    width: 120px; 
+   
+}

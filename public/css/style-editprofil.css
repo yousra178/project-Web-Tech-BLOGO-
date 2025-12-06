@@ -1,0 +1,61 @@
+body{
+    margin-top: 150px;
+    background-image: url('img/bg-icons.png');
+    opacity: 0.9;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center top;
+
+}
+.edit-profile {
+    background-color: var(--login-box-color) ;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    width: 400px;
+    height: auto;
+    margin: auto;
+    padding: 25px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+h1 {
+    color: black;
+    margin-top: 0%;
+    margin-bottom: 10px;
+     
+}
+
+img {
+    width: 150px;
+    height: 150px ;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 20px;
+}
+
+/* Algemene stijl voor alle invoervelden */
+input[type= "text"],
+input[type= "email"]{
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--button-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  height: 45px;
+    color: #2b2a2a;
+}
+
+.edit-profile > div {
+    width: 100%;
+    display: block;
+    text-align: left;
+}
+

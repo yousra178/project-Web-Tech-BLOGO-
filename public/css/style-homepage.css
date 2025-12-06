@@ -1,0 +1,10 @@
+ body{
+    margin-top: 150px;
+    background-image: url('/img/bg-icons.png');
+    opacity: 0.9;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    z-index: 1;
+}

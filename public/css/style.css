@@ -1,0 +1,45 @@
+
+/*variabelen*/
+:root {
+  --bg-color: #FAEBDD;   /* background color*/
+  --texte-font: 'Times New Roman', Times, serif;
+  --login-box-color: #BC647F;
+  --button-color: #073B4C;
+  --button-hover-color:#046c8e;
+  --texte-button-color: white;
+
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family:var(--texte-font);
+  background-color: var(--bg-color);
+}
+
+body {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+}
+
+
+button {
+    background-color: var(--button-color);
+    color: var(--texte-button-color);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+
+
+

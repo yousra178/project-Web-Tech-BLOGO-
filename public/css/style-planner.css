@@ -1,0 +1,8 @@
+.planner {
+    background-color: var(--planner-box-color);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow:black;
+    width: 300px;
+    text-align: center;
+}

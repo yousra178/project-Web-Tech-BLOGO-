@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <meta charset="UTF-8">
+    <title>Trips</title>
+</head>
+
+<body>
+    <%- include('navbar') %>
+    <div class="trips">
+        <h1>Trips of <%= username %></h1>
+        <div class="trip-list">
+            <ul>
+                <% trips.forEach(trip=> { %>
+                    <li>
+                        <%= trip.country %> -
+                             <%= trip.city %> -
+                                <%= trip.date.toLocaleDateString('nl-BE') %> :
+                                    <%= trip.activity %>
+                                         <% if (isOwnProfile) { %>
+                                            <form action="/trips/delete" method="POST" style="display:inline;">
+                                                <input type="hidden" name="id" value="<%= trip.id %>">
+                                                <button type="submit">Verwijder</button>
+                                            </form>
+                                        <% } %>
+                                    </li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                            <a href="/profile">
+                                <button type="button">Back to profile</button>
+                            </a>
+                        </div>
+                    </body>
+</html>

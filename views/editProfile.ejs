@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-editprofil.css">
+</head>
+
+<body>
+    <%- include('navbar') %>
+    <h1>Edit Profile</h1>
+    <div class="box">
+    <img id="profilePic" src="<%= user.profilePic || '/img/pfp.jpg' %>" alt="pfp">
+        <form action="/upload-profile-pic" method="post" enctype="multipart/form-data">
+            <input type="file" id="imageUpload" name="image" accept="image/*">
+            <button type="submit">Change Profile Picture</button>
+         </form>
+         <form method="post" action="/editProfile">
+            <select name="privacy">
+                <option value="public" <%= user.privacy === 'public' ? 'selected' : '' %>>Public</option>
+                <option value="private" <%= user.privacy === 'private' ? 'selected' : '' %>>Private</option>
+            </select>
+             <div class="edit-firstname">
+                <input name="firstName" type="text" placeholder="First name" value="<%= user.firstName %>" required>
+            </div>
+            <div class="edit-lastname">
+                <input name="lastName" type="text" placeholder="Last name" value="<%= user.lastName %>" required>
+            </div>
+            <div class="edit-username">
+                <input name="username" type="text" placeholder="Username" value="<%= user.username %>" required>
+            </div>
+             <div class="edit-email">
+                 <input name="email" type="email" placeholder="Email" value="<%= user.email %>" required>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+            <a href="/profile">
+                <button type="button">Return</button>
+            </a>
+        </div>
+    </body>
+</html>
+
+<!-- <script>
+    // Button -> opent hidden input
+    document.getElementById("changeBtn").addEventListener("click", () => {
+        document.getElementById("imageUpload").click();
+    });
+
+    // Wanneer user een afbeelding selecteert → update preview
+    document.getElementById("imageUpload").addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById("profilePic").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script> -->

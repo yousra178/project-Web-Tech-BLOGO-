@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="/css/style-homepage.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-posts.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="HomePage">
+        <% if (user) { %> <!--- logged in -->
+            <div class="header-section"> <!--- header with personalised greating -->
+                <h1>Welcome to Globo, <%= user.username %>!</h1>
+                <a href="/posts/new">
+                    <button class="button">Make a new post</button>
+                </a>
+            </div>
+            <div class="posts-section"> <!--- all the posts from database in here -->
+                <h2>All Posts</h2>
+                <% if (posts.length === 0) { %>
+                    <p>No posts yet.</p>
+                    <% } else { %>
+                    <div class="posts">
+                        <% posts.forEach(post => { %>
+                            <div class="post">
+                                <h3>
+                                    <a href="/user/<%= post.username %>"><%= post.username %></a>
+                                </h3>
+                                <p><%= post.caption %></p>
+                                <% if (post.images && post.images.length > 0) { %>
+                                    <div class="post-images">
+                                        <% post.images.forEach(imagePath => { %>
+                                            <img src="<%= imagePath %>" alt="Post foto" style="max-width: 400px; margin: 5px;">
+                                        <% }) %>
+                                    </div>
+                                <% } %>
+                                <small><%= new Date(post.created_at).toLocaleString('nl-BE') %></small>
+                                <% if (user.username === post.username) { %> <!--- if the post is from the user that in logged in: delete button available -->
+                                    <form action="/posts/delete" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<%= post.id %>">
+                                        <button type="submit">Delete post</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                            <hr>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %> <!--- not logged in: button to log in and another button to register-->
+            <h1>Welcome to Globo</h1>
+            <p>Log in to see more!</p>
+            <a href="/login"><button>Log in</button></a>
+            <a href="/register"><button>Register</button></a>
+        <% } %>
+    </div>
+</body>
+</html>

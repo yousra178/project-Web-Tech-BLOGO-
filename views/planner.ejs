@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-planner.css">
+    <meta charset="UTF-8">
+    <title>Planner</title>
+</head>
+
+<body>
+    <%- include('navbar') %>
+
+        <div class="planner">
+            <h2>Planner</h2>
+
+            <form class="country-set" method="post" action="/planner">
+                <div>
+                    <input name="country" type="text" placeholder="Country" required><br>
+                </div>
+
+                <div>
+                    <input name="city" type="text" placeholder="City" required><br>
+                </div>
+
+                <div>
+                    <input name="date" type="date" required><br>
+                </div>
+
+                <div>
+                    <input name="activity" type="text" placeholder="Activity" required><br>
+                </div>
+
+                <button type="submit">Add Activity</button>
+            </form>
+
+        </div>
+</body>
+
+</html>
