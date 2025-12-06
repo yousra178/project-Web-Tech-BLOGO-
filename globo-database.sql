@@ -13,25 +13,15 @@ CREATE TABLE users (
     privacy ENUM('public','private') NOT NULL DEFAULT 'public'
 );
 
--- REATE TABLE follows (
---    follower VARCHAR(50) NOT NULL,
---    followee VARCHAR(50) NOT NULL,
---   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---    PRIMARY KEY (follower, followee),
---    FOREIGN KEY (follower) REFERENCES users(username) ON DELETE CASCADE,
---    FOREIGN KEY (followee) REFERENCES users(username) ON DELETE CASCADE
---);
-
 CREATE TABLE follows (
-    id INT AUTO_INCREMENT PRIMARY KEY,   -- Klasik: Her satırın bir numarası olsun
-    follower VARCHAR(50),                -- Takip eden
-    followee VARCHAR(50),                -- Takip edilen
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    -- İlişkiyi belirtmek için basit Foreign Key (Zorunlu değil ama iyi olur)
-    FOREIGN KEY (follower) REFERENCES users(username),
-    FOREIGN KEY (followee) REFERENCES users(username)
+    follower VARCHAR(50) NOT NULL,
+    followee VARCHAR(50) NOT NULL,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (follower, followee),
+    FOREIGN KEY (follower) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (followee) REFERENCES users(username) ON DELETE CASCADE
 );
+
 CREATE TABLE trips (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
