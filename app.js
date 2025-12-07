@@ -5,8 +5,9 @@ const multer = require('multer'); // upload image
 const fs = require('fs');
 const { findUserInfoByUsername, AddUser,UpdateUser, ValidateLogin } = require('./userController');
 const { addTrip, getTripsForUser, deleteTrip, renameTripsUser } = require('./tripController');
-const { addPost, getPostsForUser, getAllPosts, deletePost, renamePostsUser } = require('./postsController');//NIEUWW
+const { addPost, getPostsForUser, getAllPosts, deletePost, renamePostsUser } = require('./postsController');
 const { followUser, unfollowUser, getFollowerCount, getFollowingCount, isFollowing, isFollowed } = require('./followController');
+const { savePostForUser, unsavePostForUser, getSavedPostsForUser, isPostSavedByUser } = require('./bookmarksController');
 
 const path = require('path');
 
@@ -63,7 +64,17 @@ app.get('/', async (req, res) => {
     if (req.session.user) {
         // Als ingelogd, toon alle posts
         const posts = await getAllPosts(req.session.user.username);
-        res.render('index', { posts });
+        const currentUser = req.session.user.username;
+        
+        // VOEG TOE: Check isSaved voor elke post
+        for (let post of posts) {
+            post.isSaved = await isPostSavedByUser(currentUser, post.id);
+        }
+        
+        res.render('index', { 
+            posts,
+            user: req.session.user  // Voeg ook user toe voor de template
+        });
     } else {
         // Als niet ingelogd, toon index zonder posts
         res.render('index', { posts: [] });
@@ -297,12 +308,12 @@ app.post('/user/:username/follow', requireAuth, async (req, res) => {
     res.redirect('/user/' + target);
 });
 
-// Pagina om een nieuwe post te maken //NIEUWW
+// Pagina om een nieuwe post te maken
 app.get('/posts/new', requireAuth, (req, res) => {
     res.render('newPost');
 });
 
-// Post toevoegen met foto('s)
+// Post toevoegen
 app.post('/posts/new', requireAuth, upload.array('images', 5), async (req, res) => {
     const username = req.session.user.username;
     const caption = req.body.caption;
@@ -313,23 +324,54 @@ app.post('/posts/new', requireAuth, upload.array('images', 5), async (req, res) 
 });
 
 // Alle posts bekijken
+//app.get('/posts', requireAuth, async (req, res) => {
+  //  const posts = await getAllPosts(req.session.user.username);
+    //res.render('posts', { posts });
+
+    //post.isSaved = await isPostSavedByUser(req.session.user.username, post.id);
+//});
+
 app.get('/posts', requireAuth, async (req, res) => {
     const posts = await getAllPosts(req.session.user.username);
-    res.render('posts', { posts });
+    const currentUser = req.session.user.username;
+    
+    console.log('=== HOMEPAGE DEBUG ===');
+    console.log('Current user:', currentUser);
+    console.log('Number of posts:', posts.length);
+    
+    // Check isSaved voor elke post
+    for (let post of posts) {
+        post.isSaved = await isPostSavedByUser(currentUser, post.id);
+        console.log(`Post ${post.id} by ${post.username} - isSaved: ${post.isSaved}`);
+    }
+    
+    console.log('Posts being sent to view:', posts.map(p => ({ id: p.id, isSaved: p.isSaved })));
+    console.log('===================');
+    
+    res.render('posts', { 
+        posts,
+        user: req.session.user
+    });
 });
 
 // Posts van specifieke user
 app.get('/posts/user/:username', requireAuth, async (req, res) => {
     const username = req.params.username;
+    const currentUser = req.session.user.username;
     const profileUser = await findUserInfoByUsername(username);
 
     const isOwnProfile = req.session.user.username === username;
     const isPrivate = profileUser?.privacy === 'private';
     const following = await isFollowing(req.session.user.username, username);
     const followed = await isFollowed(req.session.user.username, username);
-    const canViewPosts = isOwnProfile || !isPrivate || (following && followed) ;
+    const canViewPosts = isOwnProfile || !isPrivate || (following && followed);
 
     const posts = canViewPosts ? await getPostsForUser(username) : [];
+
+    // NIEUWWW
+    for (let post of posts) {
+        post.isSaved = await isPostSavedByUser(currentUser, post.id);
+    }
     
     res.render('userPosts', { posts, username, isOwnProfile, isPrivate, following, followed });
 });
@@ -340,6 +382,39 @@ app.post('/posts/delete', requireAuth, async (req, res) => {
     const { id } = req.body;
     await deletePost(id, username);
     res.redirect(`/posts/user/${username}`);
+});
+
+// Post save or unsaven
+app.post('/posts/save', requireAuth, async (req, res) => {
+    try {
+        const username = req.session.user.username;
+        const { postId } = req.body;
+        const isSaved = await isPostSavedByUser(username, postId);
+        
+        if (isSaved) {
+            await unsavePostForUser(username, postId);
+        } else {
+            await savePostForUser(username, postId);
+        }
+        
+        res.redirect(req.get('Referrer'));
+    } catch (err) {
+        console.error('Error toggling save:', err);
+        res.status(500).send('Er ging iets fout');
+    }
+});
+
+// Lookup all saved posts from user
+app.get('/bookmarks', requireAuth, async (req, res) => {
+    try {
+        const username = req.session.user.username;
+        const isOwnProfile = req.session.user.username === username;
+        const savedPosts = await getSavedPostsForUser(username);
+        res.render('bookmarks', { posts: savedPosts, username, isOwnProfile: true });
+    } catch (err) {
+        console.error('Error fetching saved posts:', err);
+        res.status(500).send('Er ging iets fout');
+    }
 });
 
 const PORT = 3000;
