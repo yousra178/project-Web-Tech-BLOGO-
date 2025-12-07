@@ -44,3 +44,12 @@ CREATE TABLE post_images (
     image_path VARCHAR(255) NOT NULL,
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
+
+CREATE TABLE saved_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    post_id INT NOT NULL,
+    FOREIGN KEY (username) REFERENCES users(username),
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    UNIQUE KEY unique_save (username, post_id)
+);

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmarks</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-posts.css">
+</head>
+
+<body>
+    <h1>Bookmarks</h1>
+
+    <% if (posts.length === 0) { %>
+        <div class="no-posts">
+            <p>You have no posts saved.</p>
+        </div>
+    <% } else { %>
+        <% posts.forEach(post => { %>
+            <div class="post">
+                <div class="post-header">
+                    <h3>
+                        <a href="/user/<%= post.username %>"><%= post.username %></a>
+                    </h3>
+                </div>
+
+                <% if (post.image_paths && post.image_paths.length > 0) { %>
+                    <div class="post-images">
+                        <% post.image_paths.forEach(imagePath => { %>
+                            <img src="<%= imagePath %>" alt="Post image" class="post-image">
+                        <% }); %>
+                    </div>
+                <% } %>
+
+                <% if (post.caption) { %>
+                    <p class="post-caption"><%= post.caption %></p>
+                <% } %>
+
+                <div class="post-actions">
+                    <form action="/posts/save" method="POST" style="display: inline;">
+                        <input type="hidden" name="postId" value="<%= post.id %>">
+                        <button type="submit" class="unsave-btn">unsave</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    <% } %>
+    <a href="<%= isOwnProfile ? '/profile' : '/user/' + username %>">
+        <button>Back to profile</button>
+    </a>
+</body>
+</html>
