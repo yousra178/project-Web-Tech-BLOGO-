@@ -19,9 +19,9 @@
         <% posts.forEach(post => { %>
             <div class="post">
                 <div class="post-header">
-                    <a href="/posts/user/<%= post.username %>" class="post-username">
-                        <%= post.username %>
-                    </a>
+                    <h3>
+                        <a href="/user/<%= post.username %>"><%= post.username %></a>
+                    </h3>
                 </div>
 
                 <% if (post.image_paths && post.image_paths.length > 0) { %>
