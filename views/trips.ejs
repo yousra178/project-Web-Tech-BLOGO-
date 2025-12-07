@@ -12,24 +12,28 @@
     <%- include('navbar') %>
     <div class="trips">
         <h1>Trips of <%= username %></h1>
-        <div class="trip-list">
-            <ul>
-                <% trips.forEach(trip=> { %>
-                    <li>
-                        <%= trip.country %> -
-                             <%= trip.city %> -
-                                <%= trip.date.toLocaleDateString('nl-BE') %> :
-                                    <%= trip.activity %>
-                                         <% if (isOwnProfile) { %>
-                                            <form action="/trips/delete" method="POST" style="display:inline;">
-                                                <input type="hidden" name="id" value="<%= trip.id %>">
-                                                <button type="submit">Verwijder</button>
-                                            </form>
-                                        <% } %>
-                                    </li>
-                                    <% }) %>
-                                </ul>
-                            </div>
+        <% if (isPrivate && !isOwnProfile && !(following && followed)) { %>
+            <p> This user's trips are private.</p>
+        <% } else { %>
+            <div class="trip-list">
+                <ul>
+                    <% trips.forEach(trip=> { %>
+                        <li>
+                            <%= trip.country %> -
+                                 <%= trip.city %> -
+                                    <%= trip.date.toLocaleDateString('nl-BE') %> :
+                                        <%= trip.activity %>
+                                             <% if (isOwnProfile) { %>
+                                                <form action="/trips/delete" method="POST" style="display:inline;">
+                                                    <input type="hidden" name="id" value="<%= trip.id %>">
+                                                    <button type="submit">Verwijder</button>
+                                                </form>
+                                            <% } %>
+                                        </li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+        <% } %>
                             <a href="/profile">
                                 <button type="button">Back to profile</button>
                             </a>

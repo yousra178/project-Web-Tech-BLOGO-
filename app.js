@@ -190,10 +190,16 @@ app.post('/planner', requireAuth, async (req, res) => {
 
 app.get('/trips/:username?', requireAuth, async (req, res) => {
     const username = req.params.username || req.session.user.username;
-    const trips = await getTripsForUser(username);
+    const targetUser = await findUserInfoByUsername(username);
     const isOwnProfile = req.session.user.username === username;
+    const isPrivate = targetUser.privacy === 'private';
+    const following = isOwnProfile ? false : await isFollowing(req.session.user.username, username);
+    const followed = isOwnProfile ? false : await isFollowed(req.session.user.username, username);
+    const canViewTrips = isOwnProfile || !isPrivate || (following && followed);
+
+    const trips = canViewTrips ? await getTripsForUser(username) : [];
     
-    res.render('trips', { trips, username, isOwnProfile });
+    res.render('trips', { trips, username, isOwnProfile, isPrivate, following, followed });
 });
 
 app.post('/trips/delete', requireAuth, async (req, res) => {
