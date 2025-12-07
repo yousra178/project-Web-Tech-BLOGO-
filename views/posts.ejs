@@ -40,6 +40,15 @@
                             <button type="submit">Verwijder</button>
                         </form>
                     <% } %>
+
+                    <div class="post-actions">
+                        <form action="/posts/save" method="POST" style="display: inline;">
+                            <input type="hidden" name="postId" value="<%= post.id %>">
+                            <button type="submit" class="<%= post.isSaved ? 'unsave-btn' : 'save-btn' %>">
+                                <%= post.isSaved ? 'Saved' : 'Save' %>
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <hr>
             <% }) %>
