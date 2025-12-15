@@ -1,0 +1,192 @@
+/* =========================
+   GLOBAL
+========================= */
+
+textarea {
+    width: 80%;
+    border-radius: 14px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    padding: 8px 10px;
+    resize: none;
+}
+
+/* =========================
+   COMMENTS PANEL
+========================= */
+
+.comments-panel {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    width: 420px;
+    height: 65%;
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0;
+    background: var(--bg-color);
+    border-radius: 20px;
+    padding: 14px;
+    transition: all 0.25s ease;
+    z-index: 999;
+    overflow-y: auto;
+    pointer-events: none;
+     box-shadow: 0px 0px 4px black;
+}
+
+.comments-panel.open {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* =========================
+   COMMENT
+========================= */
+
+.comment {
+    background: white;
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+}
+
+.comment-main {
+    font-size: 14px;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+/* =========================
+   COMMENT STATES
+========================= */
+
+.comment-menu,
+.comment-edit,
+.reply-form {
+    display: none;
+}
+
+.comment.show-menu .comment-menu {
+    display: block;
+}
+
+.comment.show-edit .comment-edit {
+    display: block;
+}
+
+.comment.show-reply .reply-form {
+    display: block;
+}
+
+/* =========================
+   REPLIES
+========================= */
+
+.comment-replies {
+    margin-left: 14px;
+    margin-top: 8px;
+    padding-left: 10px;
+    border-left: 2px solid #ddd;
+}
+
+.reply {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+}
+
+.reply-actions {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+}
+
+/* reply states */
+.reply-menu,
+.reply-edit,
+.reply-reply-form {
+    display: none;
+}
+
+.reply.show-menu .reply-menu {
+    display: block;
+}
+
+.reply.show-edit .reply-edit {
+    display: block;
+}
+
+.reply.show-reply .reply-reply-form {
+    display: block;
+}
+
+/* =========================
+   TEXT BUTTONS
+========================= */
+
+.text-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+}
+
+.text-btn:hover {
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.text-btn.danger {
+    color: #c0392b;
+}
+
+/* =========================
+   COMMENT FORM BUTTON
+========================= */
+
+.submitComment-btn {
+    margin-top: 6px;
+    background-color: var(--button-color);
+    color: var(--texte-button-color);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 5px 14px;
+}
+
+.submitComment-btn:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* =========================
+   OPEN COMMENTS BUTTON
+========================= */
+
+.toggle-comments-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.toggle-comments-btn:hover {
+    color: var(--button-color);
+    text-decoration: underline;
+    background-color: transparent;
+}

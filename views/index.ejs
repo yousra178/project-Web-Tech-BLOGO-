@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/style-navbar.css">
     <link rel="stylesheet" href="/css/style-posts.css">
+    <link rel="stylesheet" href="/css/style-comments.css">
+    <link rel="stylesheet" href="/css/style-trip.css">
+
 </head>
 <body>
     <%- include('navbar') %>
@@ -17,47 +20,137 @@
                 <a href="/posts/new">
                     <button class="button">Make a new post</button>
                 </a>
+                <a href="/planner">
+                    <button class="button">Plan a trip</button>
+                </a>
             </div>
-            <div class="posts-section"> <!--- all the posts from database in here -->
-                <h2>All Posts</h2>
-                <% if (posts.length === 0) { %>
-                    <p>No posts yet.</p>
-                    <% } else { %>
-                    <div class="posts">
-                        <% posts.forEach(post => { %>
-                            <div class="post">
-                                <h3>
-                                    <a href="/user/<%= post.username %>"><%= post.username %></a>
-                                </h3>
-                                <p><%= post.caption %></p>
-                                <% if (post.images && post.images.length > 0) { %>
-                                    <div class="post-images">
-                                        <% post.images.forEach(imagePath => { %>
-                                            <img src="<%= imagePath %>" alt="Post foto" style="max-width: 400px; margin: 5px;">
-                                        <% }) %>
+
+            <div class="header-spacer"></div>
+            
+            <div class="feed-layout">
+                <div class="posts-wrapper">
+                    <div class="posts-section"> <!--- all the posts from database in here -->
+                        <h2>All Posts</h2>
+                        <% if (posts.length === 0) { %>
+                            <p>No posts yet.</p>
+                            <% } else { %>
+                            <div class="posts">
+                                <% posts.forEach(post => { %>
+                                    <div class="post">
+
+                                        <div class="post-header">
+                                            <img src="<%= post.profilPic || '/img/pfp.jpg' %>" class="pfp">
+                                            <a href="/user/<%= post.username %>" class="postUserName"><%= post.username %></a>
+                                        </div>
+
+
+                                        <% if (post.images && post.images.length > 0) { %>
+                                            <div class="post-images">
+                                                <% post.images.forEach(imagePath => { %>
+                                                    <img src="<%= imagePath %>" alt="Post foto" style="max-width: 400px; margin: 5px;">
+                                                <% }) %>
+                                            </div>
+                                        <% } %>
+                                        <% if (user.username === post.username) { %> <!--- if the post is from the user that in logged in: delete button available -->
+                                            <form action="/posts/delete" method="POST" style="display:inline;">
+                                                <input type="hidden" name="id" value="<%= post.id %>">
+                                                <button type="submit">Delete post</button>
+                                            </form>
+                                        <% } %>
+
+                                        <!-- onder de post picture als er een is de caption er onder zetten-->
+                                        <p>
+                                            <span class="usernameCaptionAuthor"> <b><%= post.username %></b></span>
+                                            <span><b> :  </b></span>
+                                            <span class="caption"><%= post.caption %></span>
+                                        </p>
+
+                                        <div class="post-actions">
+                                        
+                                            <button
+                                                class="bookmark-btn <%= post.isSaved ? 'saved' : '' %>"
+                                                data-post-id="<%= post.id %>"
+                                                data-saved="<%= post.isSaved ? 1 : 0 %>"
+                                                onclick="toggleBookmark(this)">
+                                            </button>
+
+                                        </div>
+                                        <div>
+                                            <%- include('comments', { post: post, user: user }) %>
+                                            
+
+                                        </div>
+                                        <small class="createdDatum"><%= new Date(post.created_at).toLocaleString('nl-BE')%></small>
                                     </div>
-                                <% } %>
-                                <small><%= new Date(post.created_at).toLocaleString('nl-BE') %></small>
-                                <% if (user.username === post.username) { %> <!--- if the post is from the user that in logged in: delete button available -->
-                                    <form action="/posts/delete" method="POST" style="display:inline;">
-                                        <input type="hidden" name="id" value="<%= post.id %>">
-                                        <button type="submit">Delete post</button>
-                                    </form>
-                                <% } %>
-                                <div class="post-actions">
-                                    <form action="/posts/save" method="POST" style="display: inline;">
-                                        <input type="hidden" name="postId" value="<%= post.id %>">
-                                        <button type="submit" class="<%= post.isSaved ? 'unsave-btn' : 'save-btn' %>">
-                                            <%= post.isSaved ? 'Saved' : 'Save' %>
-                                        </button>
-                                    </form>
-                                </div>
+                                    <hr>
+                                <% }) %>
                             </div>
-                            <hr>
-                        <% }) %>
+                        <% } %>
                     </div>
-                <% } %>
+                </div>
             </div>
+            
+             <div class="trips-section">
+                    <h2>All Trips</h2>
+
+                    <% if (!trips || trips.length===0) { %>
+                        <p>No trips yet.</p>
+                        <% } else { %>
+                            <div class="trips">
+                                <% trips.forEach(trip=> { %>
+                                    <div class="trip-card">
+                                        <div class="trip-header">
+                                            <div>
+                                                <h1 class="trip-title">
+                                                    <%= trip.title %>
+                                                </h1>
+                                                <div class="meta">
+                                                    <span>Owner: <strong> <a href="/user/<%= trip.username %>">  <%= trip.username %></a>
+                                                           
+                                                        </strong></span>
+                                                    <span>Budget: <strong>
+                                                            <%= (trip.currency) + ' ' + trip.budget %>
+                                                        </strong></span>
+
+                                                    <span>Description: <%= trip.description %></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="participants">
+                                            <h3>Participants</h3>
+                                            <% trip.participants.forEach(p=> { %>
+                                                <span class="pill">
+                                                     <a href="/user/<%= trip.username %>"> <%= p.username %></a>
+                                                        <% if (p.role) { %> (<%= p.role %>) <% } %>
+                                                </span>
+                                                <% }) %>
+                                        </div>
+
+                                        <div class="locations">
+                                            <h3>Locations</h3>
+                                            <ul class="locations-list">
+                                                <% trip.locations.forEach((loc, idx)=> { %>
+                                                    <li>
+                                                        <strong>
+                                                            <%= idx + 1 %>. <%= loc.city %>, <%= loc.country %>
+                                                        </strong>
+                                                        <div>Date: <%= new Date(loc.date).toLocaleDateString('nl-BE') %>
+                                                        </div>
+                                                        <div>Activity: <%= loc.activity %>
+                                                        </div>
+                                                    </li>
+                                                    <% }) %>
+                                            </ul>
+                                        </div>
+
+                                        
+                                    </div>
+                                    <hr>
+                                    <% }) %>
+                            </div>
+                            <% } %>
+                </div>
         <% } else { %> <!--- not logged in: button to log in and another button to register-->
             <h1>Welcome to Globo</h1>
             <p>Log in to see more!</p>
@@ -65,5 +158,10 @@
             <a href="/register"><button>Register</button></a>
         <% } %>
     </div>
-</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/comments.js"></script>
+    <script src="/js/bookmarks.js"></script>
+    </body>
 </html>
+
+

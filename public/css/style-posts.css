@@ -1,40 +1,107 @@
+/* =========================
+   HEADER
+========================= */
+
 .header-section {
+    background-color: var(--bg-color);
     position: sticky;
-    top: 40px; /* Pas aan op basis van je navbar hoogte */
-    background: white;
+    top: 100px; /* Pas aan op basis van je navbar hoogte */
+    box-shadow: 0px 0px 4px black;
+    border-radius: 15px;
     z-index: 10;
     padding: 20px 0;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    height: 100px;
 }
 
-  /* Posts section normaal positioneren (geen top gebruiken) */
-  .posts-section {
-    position: sticky;
-    top: 120px;
+.header-spacer {
+    height: 35%;
+}
+
+
+/* =========================
+   POSTS LAYOUT
+========================= */
+
+/* Wrapper zorgt voor scroll */
+.posts-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Posts section normaal positioneren (geen top gebruiken) */
+.posts-section {
     z-index: 1;
     padding: 20px 0;
     margin-bottom: 20px;
-  }
+    width: 500px;
+}
+
+.posts-section h2 {
+  text-align: center;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 30px;
+}
+
 
 /* Posts Container */
 .posts-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
 }
 
-/* Individuele Post */
+
+/* =========================
+   POST CARD
+========================= */
+
 .post {
-    background: #fff;
+    background: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
+    margin: 40px auto;
+    max-width: 500px;
 }
 
 .post:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
+
+/* =========================
+   POST HEADER
+========================= */
+
+.post-header {
+    display: flex;
+    align-items: center; /* of flex-start als je hoger wil */
+    gap: 20px;
+}
+
+.pfp {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.postUserName {
+    display: inline-block;
+    font-size: 30px;
+    margin-top: -4px; /* kleine visuele correctie */
+    font-weight: 600;
+    color: black;
+}
+
+
+/* =========================
+   POST CONTENT
+========================= */
 
 .post h3 {
     margin: 0 0 10px 0;
@@ -59,7 +126,23 @@
     color: #333;
 }
 
-/* Post Images */
+/* Post Metadata */
+.post small {
+    display: block;
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.createdDatum {
+    color: rgb(48, 46, 46);
+}
+
+
+/* =========================
+   POST IMAGES
+========================= */
+
 .post-images {
     display: flex;
     flex-wrap: wrap;
@@ -88,27 +171,52 @@
     max-height: 250px;
 }
 
-/* Post Metadata */
-.post small {
-    display: block;
-    color: #666;
-    font-size: 14px;
-    margin-top: 10px;
-}
 
-/* Post Actions */
+/* =========================
+   POST ACTIONS
+========================= */
+
 .post form {
     margin-top: 15px;
 }
 
-/* Divider tussen posts */
+
+/* =========================
+   BOOKMARK BUTTON
+========================= */
+
+.bookmark-btn {
+    width: 30px;
+    height: 30px;
+    background-image: url("/img/icon-bookmark-empty.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 0;
+}
+
+.bookmark-btn.saved {
+    background-image: url("/img/icon-bookmark.png");
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+.bookmark-btn:hover{
+    background-color: transparent;
+}
+
+/* =========================
+   DIVIDERS & EMPTY STATE
+========================= */
+
 hr {
     border: none;
     border-top: 1px solid #eee;
     margin: 0;
 }
 
-/* Geen posts bericht */
 .no-posts {
     text-align: center;
     padding: 40px;
@@ -116,21 +224,36 @@ hr {
     font-size: 18px;
 }
 
-/* Responsive design */
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes scroll {
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
 @media (max-width: 768px) {
     .home-container {
         padding: 10px;
     }
-    
+
     .post {
         padding: 15px;
     }
-    
+
     .post-images img:not(:only-child) {
         max-width: 100%;
         max-height: 300px;
     }
-    
+
     .posts-feed {
         max-height: calc(100vh - 200px);
     }

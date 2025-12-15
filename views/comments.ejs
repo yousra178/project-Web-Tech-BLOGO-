@@ -1,0 +1,196 @@
+<div class="post-comment-box">
+
+    <% if (user) { %>
+        <!-- NIEUWE COMMENT -->
+       <form
+        action="/comments/new"
+        method="POST"
+        class="comment-form"
+        onsubmit="submitCommentPost(event, this)">
+
+
+            <input type="hidden" name="post_id" value="<%= post.id %>">
+            <textarea name="caption" rows="2" placeholder="Write a comment..."></textarea>
+            <button type="submit" class="submitComment-btn">Place comment</button>
+        </form>
+    <% } %>
+
+    <!-- OPEN COMMENTS -->
+    <button
+        type="button"
+        class="toggle-comments-btn"
+        data-post-id="<%= post.id %>"
+        onclick="openComments(this)">
+        View all comments
+    </button>
+
+    <!-- COMMENTS PANEL -->
+    <div class="comments-panel" id="comments-panel-<%= post.id %>">
+
+        <!--  BELANGRIJK: content wrapper -->
+        <div class="comments-content">
+
+            <div class="comments-header">
+                <span>Comments</span>
+                <button
+                    type="button"
+                    onclick="closeComments(this)"
+                    data-post-id="<%= post.id %>">✕</button>
+            </div>
+
+            <% if (post.comments && post.comments.length > 0) { %>
+                <% post.comments.forEach(comment => { %>
+
+                    <div class="comment">
+
+                        <!-- COMMENT TEXT -->
+                        <div class="comment-main">
+                            <strong><%= comment.username %></strong>
+                            <span><%= comment.caption %></span>
+                        </div>
+
+                        <!-- COMMENT ACTIONS -->
+                        <div class="comment-actions">
+                            <% if (user) { %>
+                                <button
+                                    type="button"
+                                    class="text-btn"
+                                    onclick="toggleReply(this)">
+                                    Reageren
+                                </button>
+                            <% } %>
+
+                            <% if (user && user.username === comment.username) { %>
+                                <button
+                                    type="button"
+                                    class="text-btn"
+                                    onclick="toggleMenu(this)">
+                                    ⋯
+                                </button>
+                            <% } %>
+                        </div>
+
+                        <!-- COMMENT MENU -->
+                        <% if (user && user.username === comment.username) { %>
+                            <div class="comment-menu">
+
+                                <form
+                                    action="/comments/delete"
+                                    method="POST"
+                                    onsubmit="submitCommentPanel(event, this)">
+                                    <input type="hidden" name="id" value="<%= comment.id %>">
+                                    <button type="submit" class="text-btn danger">Delete</button>
+                                </form>
+
+                                <button
+                                    type="button"
+                                    class="text-btn"
+                                    onclick="toggleEdit(this)">
+                                    Edit
+                                </button>
+                            </div>
+
+                            <!-- COMMENT EDIT -->
+                            <form
+                                action="/comments/update"
+                                method="POST"
+                                class="comment-edit"
+                                onsubmit="submitCommentPanel(event, this)">
+
+                                <input type="hidden" name="id" value="<%= comment.id %>">
+                                <input type="text" name="caption" value="<%= comment.caption %>">
+                                <button type="submit">Save</button>
+                            </form>
+                        <% } %>
+
+                        <!-- REPLY FORM -->
+                        <% if (user) { %>
+                            <form
+                                action="/comments/new"
+                                method="POST"
+                                class="reply-form"
+                                onsubmit="submitCommentPanel(event, this)">
+                                <input type="hidden" name="post_id" value="<%= post.id %>">
+                                <input type="hidden" name="parent_id" value="<%= comment.id %>">
+                                <input type="text" name="caption" placeholder="Antwoord...">
+                                <button type="submit">Reply</button>
+                            </form>
+                        <% } %>
+
+                        <!-- REPLIES -->
+                        <% if (comment.replies && comment.replies.length > 0) { %>
+                            <div class="comment-replies">
+
+                                <% comment.replies.forEach(reply => { %>
+                                    <div class="reply">
+
+                                        <!-- REPLY MAIN -->
+                                        <div class="reply-main">
+                                            <strong><%= reply.username %></strong>
+                                            <span><%= reply.caption %></span>
+                                        </div>
+
+                                        <!-- REPLY ACTIONS -->
+                                        <div class="reply-actions">
+                                            <% if (user && user.username === reply.username) { %>
+                                                <button
+                                                    type="button"
+                                                    class="text-btn"
+                                                    onclick="toggleReplyMenu(this)">
+                                                    ⋯
+                                                </button>
+                                            <% } %>
+                                        </div>
+
+                                        <% if (user && user.username === reply.username) { %>
+
+                                            <!-- REPLY MENU -->
+                                            <div class="reply-menu">
+                                                <form
+                                                    action="/comments/delete"
+                                                    method="POST"
+                                                    onsubmit="submitCommentPanel(event, this)">
+                                                    <input type="hidden" name="id" value="<%= reply.id %>">
+                                                    <button type="submit" class="text-btn danger">Delete</button>
+                                                </form>
+
+                                                <button
+                                                    type="button"
+                                                    class="text-btn"
+                                                    onclick="toggleReplyEdit(this)">
+                                                    Edit
+                                                </button>
+                                            </div>
+
+                                            <!-- REPLY EDIT FORM -->
+                                            <form
+                                                action="/comments/update"
+                                                method="POST"
+                                                class="reply-edit"
+                                                onsubmit="submitCommentPanel(event, this)">
+                                                <input type="hidden" name="id" value="<%= reply.id %>">
+                                                <input type="text" name="caption" value="<%= reply.caption %>">
+                                                <button type="submit">Save</button>
+                                            </form>
+
+                                        <% } %>
+
+                                    </div>
+
+                                <% }) %>
+
+                            </div>
+                        <% } %>
+
+
+                    </div>
+
+                <% }) %>
+            <% } else { %>
+                <p class="no-comments">Geen commentaar...</p>
+            <% } %>
+
+        </div> <!-- /comments-content -->
+    </div> <!-- /comments-panel -->
+
+</div>
