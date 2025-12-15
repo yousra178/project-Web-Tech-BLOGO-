@@ -1,0 +1,141 @@
+.new-post-page {
+    min-height: 100vh;
+    font-family: var(--texte-font);
+}
+
+/* Container */
+.post-container {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Card */
+.post-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header */
+.post-header {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.post-header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.post-header p {
+    color: var(--login-box-color);
+    font-size: 15px;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.form-group label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%; 
+    max-width: 450px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+
+/* Upload area (smaller) */
+.file-upload-area {
+    width: 100%;
+    max-width: 250px;   /* smaller upload box */
+    border: 2px dashed #d0d0d0;
+    border-radius: 12px;
+    padding: 18px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    background: #fafafa;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-upload-area:hover {
+    border-color: var(--button-hover-color);
+    background: #f5f7ff;
+}
+
+/* Upload icon */
+.upload-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+    color: var(--login-box-color);
+}
+
+/* File input */
+.file-upload-area input[type="file"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    background: white;
+}
+
+/* Upload hint */
+.upload-hint {
+    color: #999;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* Submit button */
+.submit-btn {
+    width: 100%;
+    max-width: 500px;
+    padding: 16px;
+    margin-top: 15px;
+
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: var(--button-hover-color);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .post-card {
+        padding: 25px;
+    }
+
+    .post-header h1 {
+        font-size: 26px;
+    }
+}

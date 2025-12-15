@@ -1,0 +1,23 @@
+<div class="topbar">
+    <img src="/img/logo.png" alt="Logo" class="logoNavbar">
+    <form class="search-bar" action="/search" method="GET">
+        <input type="text" name="searchbar" placeholder="Search..." required>
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/planner">Planner</a></li>
+        <li><a href="/map">Map</a></li>
+        <% if (user) { %>
+            <li><a href="/profile">Profile</a></li>
+            <li>
+                <form action="/logout" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </li>
+            <% } else { %>
+                <li><a href="/login">Log In</a></li>
+                <li><a href="/register">Register</a></li>
+                <% } %>
+    </ul>
+</div>

@@ -1,0 +1,55 @@
+#map-layout {
+    display: flex;
+    margin: auto;
+    margin-top: 9%;
+}
+
+#map {
+    height: 600px;
+    width: 800px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+
+}
+
+.map-title {
+    color: rgb(63, 63, 63);
+    position: absolute;
+    top: 7%;
+    left: 170px;
+    padding-top: 20px;
+    font-family:'Times New Roman', Times, serif;
+    width: 120px;
+
+}
+
+#map-sidebar {
+    width: 120px;
+    background: white;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#map-sidebar h3 {
+    margin-bottom: 10px;
+    color: var(--login-box-color);
+}
+
+
+#map-stats p {
+    margin: 7px 0;
+    font-size: 16px;
+    color: rgb(9, 33, 40);
+}
+
+#total-stat{
+     border-top: 2px solid #eee;
+}
+
+input[type="checkbox"] {
+    accent-color:  var(--button-color); 
+}

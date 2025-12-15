@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Following</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="follow-list">
+        <h2>Following</h2>
+        <% if (following.length === 0) { %>
+            <p>No following.</p>
+        <% } else { %>
+            <ul>
+                <% following.forEach(f => { %>
+                    <li>
+                        <a href="/user/<%= f.username %>"><%= f.username %></a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+        <a href="<%= isOwnProfile ? '/profile' : '/user/' + username %>">
+            <button>Back to profile</button>
+        </a>
+    </div>
+</body>
+</html>

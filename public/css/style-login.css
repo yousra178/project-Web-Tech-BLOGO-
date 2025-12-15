@@ -1,0 +1,60 @@
+
+
+.login-box {
+    background-color: var(--login-box-color);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow:black;
+    width: 300px;
+    text-align: center;
+}
+
+.logo {
+    width: 400px;       
+    margin-bottom: 20px; 
+}
+
+
+button {
+    background-color: var(--button-color) ;
+    color: var(--texte-button-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+h2 {
+    text-align: center;
+}
+
+.input-row {
+  display: flex;          
+  gap: 10px;              
+  justify-content: center; 
+}
+
+.input-row input {
+  flex: 1;                
+  width: 45%;            
+}
+
+/* Algemene stijl voor alle invoervelden */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #D5A18E;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  height: 45px;
+}

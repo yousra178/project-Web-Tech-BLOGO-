@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nieuwe Post</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-newPost.css">
+
+</head>
+<body class="new-post-page">
+    <%- include('navbar') %>
+    <div class="post-container">
+        <div class="post-card">
+            <div class="post-header">
+                <h1>Create a new Post</h1>
+                <p>Share your thoughts and memories with friends</p>
+            </div>
+            
+            <form action="/posts/new" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="caption">Text:</label>
+                    <textarea name="caption" id="caption" rows="4" placeholder="What do you want to share?" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="images">Images (max 5):</label>
+                    <div class="file-upload-area">
+                        <div class="upload-icon"></div>
+                        <input type="file" name="images" id="images" accept="image/*" multiple>
+                        <div class="upload-hint">Hold Ctrl/Cmd to select more images</div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Share Post</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

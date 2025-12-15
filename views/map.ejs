@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <!-- leaflet css-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-map.css">
+    <meta charset="UTF-8">
+    <title>Map</title>
+</head>
+
+<body>
+    <%- include('navbar') %>
+
+        <h1 class="map-title">My Map</h1>
+        <div id="map-layout">
+            <div id="map-sidebar">
+                <h3>Filters</h3>
+                <label class="filter-option">
+                    <input type="checkbox" id="filter-wishlist" checked>
+                    Wishlist
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" id="filter-visited" checked>
+                    Visited
+                </label>
+                <div id="map-stats">
+                    <h3>Stats</h3>
+                    <p id="visited-count">Visited: 0</p>
+                    <p id="wishlist-count">Wishlist: 0</p>
+                    <div id="total-stat"> <p id="total-locations">Total Locations: 0</p></div>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+        <script src="/js/map.js"></script>
+</body>
+
+</html>

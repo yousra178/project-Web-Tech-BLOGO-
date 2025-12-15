@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    
+    <h1>All Posts</h1>
+    
+    <a href="/posts/new">Create New Post</a>
+    
+    <% if (posts.length === 0) { %>
+        <p>No posts yet.</p>
+    <% } else { %>
+        <div class="posts-container">
+            <% posts.forEach(post => { %>
+                <div class="post">
+                    <h3><a href="/user/<%= post.username %>"><%= post.username %></a></h3>
+                    
+                    <p><%= post.caption %></p>
+                    
+                    <!-- Toon alle foto's -->
+                    <% if (post.images && post.images.length > 0) { %>
+                        <div class="post-images">
+                            <% post.images.forEach(imagePath => { %>
+                                <img src="<%= imagePath %>" alt="Post foto" style="max-width: 400px; margin: 5px;">
+                            <% }) %>
+                        </div>
+                    <% } %>
+                    
+                    <small><%= new Date(post.created_at).toLocaleString('nl-BE') %></small>
+                    
+                    <% if (user && user.username === post.username) { %>
+                        <form action="/posts/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= post.id %>">
+                            <button type="submit">Verwijder</button>
+                        </form>
+                    <% } %>
+
+                    <div class="post-actions">
+                        <form action="/posts/save" method="POST" style="display: inline;">
+                            <input type="hidden" name="postId" value="<%= post.id %>">
+                            <button type="submit" class="<%= post.isSaved ? 'unsave-btn' : 'save-btn' %>">
+                                <%= post.isSaved ? 'Saved' : 'Save' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+            <% }) %>
+        </div>
+    <% } %>
+</body>
+</html>

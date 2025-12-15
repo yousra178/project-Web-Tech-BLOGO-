@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-profile.css">
+
+</head>
+
+<body>
+    <%- include('navbar') %>
+        <div class="profile">
+            <div class="profile-header">
+                <img src="<%= user.profilePic || '/img/pfp.jpg' %>" class="pfp">
+            <div class="profile-info">
+                <div class="stats">
+                    <div class="stat"><a href="/user/<%= user.username %>/followers"><span>Followers: </span><strong><%= followerCount %></strong></a></div>
+                    <div class="stat"><a href="/user/<%= user.username %>/following"><span>Following: </span><strong><%= followingCount %></strong></a></div>
+                </div>
+            <h2 class="username">
+                <%= user.username %>
+                <% if (user.privacy === 'private') { %>
+                    <img src="/img/padlock.png" alt="Private" class="lock-icon">
+                    <% } %>
+                </h2>
+            <a href="/editProfile">
+                <button class="edit-btn">Edit profile</button>
+            </a>
+            </div>      
+        </div>
+                    
+        <div class="profilepage_content">
+            <table>
+                <th>
+                    <div class="Posts">
+                        <h2>Posts</h2>
+                        <a href="/posts/user/<%= user.username %>">
+                            <button class="icons"><img src="/img/icon-camera.png"></button>
+                        </a>
+                    </div>
+                </th>
+                <th>
+                    <div class="trips">
+                        <h2>Trips</h2>
+                        <a href="/trips">
+                        <button class="icons"> <img src="img/icon-trip.png" ></button>
+                        </a>
+                    </div>
+                </th>
+                <th>
+                    <div class="bookmarks">
+                        <h2>Bookmarks</h2>
+                        <a href="/bookmarks">
+                        <button class="icons"> <img src="img/icon-bookmark.png"></button>
+                    </a>
+                    </div>
+                </th>
+            </table>
+        </div>
+</body>
+
+</html>
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-profile.css">
+    <meta charset="UTF-8">
+    <title>Trips</title>
+</head>
+
+<body>
+    <%- include('navbar') %>
+    <div class="trips">
+        <h1>Trips of <%= username %></h1>
+
+        <% if (isPrivate && !isOwnProfile && !(following && followed)) { %>
+            <p>This user's trips are private.</p>
+        <% } else { %>
+            <% if (trips && trips.length > 0) { %>
+                <div class="trip-list">
+                    <ul>
+                        <% trips.forEach(trip => { %>
+                            <li>
+                                <strong><a href="/trip/<%= trip.id %>"><%= trip.title %></a></strong> - <%= trip.description %><br>
+                                
+                                <% if (isOwnProfile) { %>
+                                    <form action="/trips/delete" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<%= trip.id %>">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                    <form action="/planner/edit/<%= trip.id %>" method="GET" style="display:inline;">
+                                        <button type="submit">Edit</button><br>
+                                    </form>
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% } else { %>
+                <p>No trips or locations added yet.</p>
+            <% } %>
+        <% } %>
+
+        <a href="/profile">
+            <button type="button">Back to profile</button>
+        </a>
+    </div>
+</body>
+
+</html>

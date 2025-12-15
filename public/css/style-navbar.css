@@ -1,0 +1,90 @@
+.topbar {
+    background-color: var(--login-box-color);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 70px; 
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.logoNavbar {
+    height: 60px;
+    width: auto;
+}
+
+.search-bar {
+    display: flex; 
+    align-items: center;
+    gap: 5px;
+    width: 600px; 
+}
+
+.search-bar input {
+    flex: 1; 
+    padding: 6px;
+    border: none;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.search-bar button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--button-color);
+    color: white;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.topbar ul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+.topbar ul li form {
+    margin: 0; 
+}
+
+.logout-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--button-color);
+    color: white;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: var(--button-hover-color);
+}
+
+.topbar ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.topbar ul li a:hover {
+    background-color: var(--button-hover-color);
+}
+
+body {
+    padding-top: 90px;
+}

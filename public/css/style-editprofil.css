@@ -1,0 +1,100 @@
+body {
+    margin-top: 50px;
+
+
+}
+
+.edit-profile {
+    background-color: var(--login-box-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    width: 400px;
+    height: auto;
+    margin: auto;
+    padding: 25px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+
+h1 {
+    color: black;
+    margin-top: 0%;
+    margin-bottom: 10px;
+
+}
+
+img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 20px;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid var(--button-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    height: 45px;
+    color: #2b2a2a;
+}
+
+.box {
+    margin-top: 20px;
+
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font: var(--texte-font);
+}
+
+
+.privacy-select {
+    align-self: flex-start;
+    margin-right: 280px;
+    margin-top: 10px;
+    font: var(--texte-font);
+    height: 30px;
+    width: 100px;
+
+}
+
+.button-layout {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.left-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.delete-btn {
+    background-color: #aa2e20;
+
+}
+
+.pfp-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-bottom: 20px;
+}

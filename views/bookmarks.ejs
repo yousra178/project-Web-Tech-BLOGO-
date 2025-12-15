@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmarks</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-posts.css">
+</head>
+
+<body>
+    <%- include('navbar') %>
+    <h1>Bookmarks</h1>
+
+    <% if (posts.length === 0) { %>
+        <div class="no-posts">
+            <p>You have no posts saved.</p>
+        </div>
+    <% } else { %>
+        <% posts.forEach(post => { %>
+            <div class="post">
+                <div class="post-header">
+                    <h3>
+                        <a href="/user/<%= post.username %>"><%= post.username %></a>
+                    </h3>
+                </div>
+
+                <% if (post.caption) { %> 
+                    <p class="post-caption"><%= post.caption %></p>
+                <% } %>
+
+                <% if (post.images && post.images.length > 0) { %>
+                    <div class="post-images">
+                        <% post.images.forEach(imagePath => { %>
+                            <img src="<%= imagePath %>" alt="Post foto" style="max-width: 100%; margin: 5px 0;">
+                        <% }) %>
+                    </div>
+                <% } %>
+
+                <small><%= new Date(post.created_at).toLocaleString('nl-BE') %></small>
+
+                <% if (user.username === post.username) { %>
+                    <form action="/posts/delete" method="POST" style="display:inline; margin-top: 10px;">
+                        <input type="hidden" name="id" value="<%= post.id %>">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                <% } %>
+
+                <div class="post-actions">
+                    <form action="/posts/save" method="POST" style="display: inline;">
+                        <input type="hidden" name="postId" value="<%= post.id %>">
+                        <button type="submit" class="unsave-btn">unsave</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    <% } %>
+    <a href="<%= isOwnProfile ? '/profile' : '/user/' + username %>">
+        <button>Back to profile</button>
+    </a>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-editprofil.css">
+</head>
+
+<body>
+    <%- include('navbar') %>
+        <h1>Edit Profile</h1>
+        <div class="box">
+            <div class="pfp-container">
+                <img id="profilePic" src="<%= user.profilePic || '/img/pfp.jpg' %>" alt="pfp">
+            </div>
+            <form action="/upload-profile-pic" class="upload" method="post" enctype="multipart/form-data">
+                <input type="file" id="imageUpload" name="image" accept="image/*">
+                <button type="submit">Change Profile Picture</button>
+            </form>
+            <select name="privacy" class="privacy-select">
+                <option value="public" <%=user.privacy==='public' ? 'selected' : '' %>>Public</option>
+                <option value="private" <%=user.privacy==='private' ? 'selected' : '' %>>Private</option>
+            </select>
+            <form id="editProfileForm" method="post" action="/editProfile">
+                <div class="edit-firstname">
+                    <input name="firstName" type="text" placeholder="First name" value="<%= user.firstName %>" required>
+                </div>
+                <div class="edit-lastname">
+                    <input name="lastName" type="text" placeholder="Last name" value="<%= user.lastName %>" required>
+                </div>
+                <div class="edit-username">
+                    <input name="username" type="text" placeholder="Username" value="<%= user.username %>" required>
+                </div>
+                <div class="edit-email">
+                    <input name="email" type="email" placeholder="Email" value="<%= user.email %>" required>
+                </div>
+            </form>
+
+            <div class="button-layout">
+
+                <div class="left-buttons">
+                    <button type="submit" form="editProfileForm">Save</button>
+
+                    <a href="/profile">
+                        <button type="button">Return</button>
+                    </a>
+                </div>
+
+                <form class="delete-container" method="post" action="/deleteAccount"
+                    onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                    <button type="submit" class="delete-btn">Delete Account</button>
+                </form>
+
+            </div>
+
+        </div>
+    </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= trip.title %> - Trip
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-trip.css">
+</head>
+
+<body>
+    <%- include('navbar') %>
+
+        <div class="trip-page">
+            <div class="trip-card">
+                <div class="trip-header">
+                    <div>
+                        <h1 class="trip-title">
+                            <%= trip.title %>
+                        </h1>
+                        <div class="meta">
+                            <span>Owner: <strong>
+                                    <%= trip.username %>
+                                </strong></span>
+                            <span>Budget: <strong>
+                                    <%= (trip.currency) + ' ' + trip.budget %>
+                                </strong></span>
+
+                            <span>Description: <%= trip.description %></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="participants">
+                    <h3>Participants</h3>
+                    <% trip.participants.forEach(p=> { %>
+                        <span class="pill">
+                            <%= p.username %>
+                                <% if (p.role) { %> (<%= p.role %>) <% } %>
+                        </span>
+                        <% }) %>
+                </div>
+
+                <div class="locations">
+                    <h3>Locations</h3>
+                    <ul class="locations-list">
+                        <% trip.locations.forEach((loc, idx)=> { %>
+                            <li>
+                                <strong><%= idx + 1 %>. <%= loc.city %>, <%= loc.country %></strong>
+                                <div>Date: <%= new Date(loc.date).toLocaleDateString('nl-BE') %></div>
+                                <div>Activity: <%= loc.activity %></div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+
+                <div class="buttons">
+                    <a href="/trips"><button type="button">Back to trips</button></a>
+                    <% if (isOwner) { %>
+                        <a href="/planner/edit/<%= trip.id %>"><button type="button">Edit trip</button></a>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

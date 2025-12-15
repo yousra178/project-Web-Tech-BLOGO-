@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+    <link rel="stylesheet" href="/css/style-planner.css">
+    <title>Trip Planner</title>
+</head>
+
+<body class="planner-page">
+    <%- include('navbar') %>
+        <% function formatDate(dateStr) { if (!dateStr) return '' ; var d=new Date(dateStr); var year=d.getFullYear();
+            var month=(d.getMonth() + 1).toString(); if (month.length===1) month='0' + month; var
+            day=d.getDate().toString(); if (day.length===1) day='0' + day; return year + '-' + month + '-' + day; } %>
+
+            <div class="container">
+                <!-- LEFT: Friends to add -->
+                <div class="friends-sidebar">
+                    <h3>Add Friends</h3>
+                    <div id="friendsList">
+
+                    </div>
+                    <datalist id="country-options"></datalist>
+                    <datalist id="city-options"></datalist>
+                </div>
+
+                <!-- MIDDLE: Trip planning -->
+                <div class="main-content">
+                    <form action="<%= editTrip ? '/planner/update/' + editTrip.id : '/planner/create' %>" method="POST">
+
+                        <!-- Title -->
+                        <div class="trip-header">
+                            <input type="text" name="title" id="tripTitle" value="<%= editTrip ? editTrip.title : '' %>"
+                                placeholder="Trip title" required>
+                            <textarea name="description" id="tripDescription" rows="2"
+                                placeholder="Description (optional)"><%= editTrip ? editTrip.description : '' %></textarea>
+
+                            <!-- Budget -->
+
+                        </div>
+                                                <div class="budget-section">
+                            <h3>Budget</h3>
+                            <div class="budget-inputs">
+                                <input type="number" name="budget" id="tripBudget" min="0" step="0.01"
+                                    placeholder="Amount" value="<%= editTrip ? editTrip.budget : '' %>">
+                                <select name="currency" id="tripCurrency" required>
+                                    <option value="">Select currency</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <!-- Participants -->
+                        <div class="participants-section">
+                            <h3>Participants</h3>
+                            <div id="participantsList">
+                                <% if (editTrip && editTrip.participants) { %>
+                                    <% editTrip.participants.forEach((p)=> { %>
+                                        <span class="participant-tag">
+                                            <%= p.username %>
+                                        </span>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <span class="participant-tag">You </span>
+                                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Locations -->
+                        <div class="locations-section">
+                            <h3>Locations</h3>
+                            <div id="locationsContainer">
+                                <% if (editTrip && editTrip.locations && editTrip.locations.length> 0) { %>
+                                    <% editTrip.locations.forEach((loc, i)=> { %>
+                                        <div class="location-card">
+
+                                            <div class="location-number">
+                                                <%= i + 1 %>
+                                            </div>
+
+                                            <div class="location-content">
+                                                <div class="location-inputs">
+                                                    <input type="text" name="locations[<%= i %>][country]"
+                                                        value="<%= loc.country %>" placeholder="Country"
+                                                        list="country-options" autocomplete="off">
+
+                                                    <input type="text" name="locations[<%= i %>][city]"
+                                                        value="<%= loc.city %>" placeholder="City" list="city-options"
+                                                        autocomplete="off">
+
+                                                    <input type="date" name="locations[<%= i %>][date]"
+                                                        value="<%= formatDate(loc.date) %>">
+
+                                                    <input type="text" name="locations[<%= i %>][activity]"
+                                                        value="<%= loc.activity %>" placeholder="Activity">
+
+                                                    <button type="button"
+                                                        class="visited-toggle <%= loc.visited ? 'visited' : 'not-visited' %>"
+                                                        onclick="toggleVisited(this)"
+                                                        data-visited="<%= loc.visited ? 'true' : 'false' %>">
+                                                        <%= loc.visited ? '✓ Visited' : '○ Yet to Visit' %>
+                                                    </button>
+                                                </div>
+
+                                                <button type="button" class="remove-location"
+                                                    onclick="removeExistingLocation(this)">
+                                                    Remove
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                        <% }) %>
+                                            <% } %>
+                            </div>
+
+                            <button type="button" onclick="addLocation()">+ Location</button>
+                        </div>
+
+                        <!-- Submit button -->
+                         <div class="trip-buttons">
+                        <button class="save-trip-btn" type="button" onclick="saveTrip('draft')">
+                            <%= editTrip ? "Save Changes" : "Save Trip" %>
+                        </button>
+                        <button class="post-trip-btn" type="button" onclick="saveTrip('published')">
+                            <%= editTrip ? "Save Changes" : "Post Trip" %>
+                        </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <!-- RIGHT: Chat -->
+                <div class="chat-sidebar">
+                    <div class="chat-header">
+                        <h3>Chat</h3>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="empty-state">
+                            <p>No messages yet.<br>Start chatting with your trip buddies!</p>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Type a message..."
+                            onkeypress="handleEnter(event)">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+            <div id="plannerData" data-current-user="<%= user.username %>"
+                data-edit-trip="<%- (editTrip ? JSON.stringify(editTrip) : 'null').replace(/\"/g, '&quot;').replace(/'/g, '&#39;') %>"
+                data-edit-trip-id="<%= editTrip ? editTrip.id : '' %>"
+                data-edit-trip-title="<%- editTrip ? editTrip.title.replace(/\"/g, '&quot;').replace(/'/g, '&#39;') : '' %>"
+                data-edit-trip-description="<%- editTrip ? (editTrip.description || '').replace(/\"/g, '&quot;').replace(/'/g, '&#39;') : '' %>">
+            </div>
+            </div>
+
+            <script src="/ajax/planner-autocomplete.js"></script>
+            <script src="/js/planner.js"></script>
+
+
+</body>
+
+</html>

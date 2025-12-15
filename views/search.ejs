@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zoekresultaten</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style-navbar.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    
+    <h1>Results for "<%= query %>"</h1>
+    
+    <h2>Trips</h2>
+    <% if (trips.length === 0) { %>
+        <p>No trips found.</p>
+    <% } else { %>
+        <ul>
+            <% trips.forEach(trip => { %>
+                <li>
+                    <a href="/user/<%= trip.username %>"> <%= trip.username %></a> - <a href="/trip/<%= trip.id %>"><%= trip.title %></a> - <%= trip.country %> - <%= trip.city %> - <%= new Date(trip.date).toLocaleDateString('nl-BE') %> : <%= trip.activity %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+    
+    <h2>Users</h2>
+    <% if (users.length === 0) { %>
+        <p>No users found.</p>
+    <% } else { %>
+        <ul>
+            <% users.forEach(user => { %>
+                <li>
+                    <a href="/user/<%= user.username %>"><%= user.username %></a> - <%= user.firstName %> <%= user.lastName %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</body>
+</html>
