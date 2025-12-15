@@ -52,7 +52,7 @@ CREATE TABLE trips (
     description TEXT,
     budget DECIMAL(10,2) DEFAULT 0,
     currency VARCHAR(10) DEFAULT 'EUR',
-    status ENUM('draft', 'published') DEFAULT 'draft';
+    status ENUM('draft', 'published') DEFAULT 'draft',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
