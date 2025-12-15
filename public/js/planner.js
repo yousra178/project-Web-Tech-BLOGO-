@@ -9,7 +9,7 @@ const editTripId = plannerData?.dataset.editTripId;
 
 let editTrip = null;
 if (plannerData?.dataset.editTrip) {
-        editTrip = JSON.parse(plannerData.dataset.editTrip);
+    editTrip = JSON.parse(plannerData.dataset.editTrip);
 }
 
 // Initialize
@@ -47,36 +47,70 @@ async function init() {
     }
 }
 
-function renderCurrencyOptions(list) {
-    var select = document.getElementById('tripCurrency');
-    select.innerHTML = '<option value="">Select currency</option>';
-    
-    for (var i = 0; i < list.length; i++) {
-        var option = document.createElement('option');
-        option.value = list[i].code;
-        option.textContent = list[i].code + ' - ' + list[i].name;
-        select.appendChild(option);
-    }
-}
-
+//currencies -> first popular ones then the others
 async function populateCurrencies() {
     var select = document.getElementById('tripCurrency');
     if (!select) return;
 
-    try {
-        var response = await fetch('/data/currencies.json');
-        var data = await response.json();
-        renderCurrencyOptions(data);
-    } catch (err) {
-        console.error('Failed to load currencies:', err);
-        select.innerHTML = '<option value="EUR">EUR - Euro</option>';
+
+    var response = await fetch('https://raw.githubusercontent.com/mhs/world-currencies/refs/heads/master/currencies.json');
+    var data = await response.json();
+    var popularCurrencies = ["USD", "EUR", "JPY", "GBP", "AUD", "CAD", "CHF"];
+
+    var popularList = [];
+    var otherList = [];
+
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        var isPopular = false;
+
+        for (var j = 0; j < popularCurrencies.length; j++) {
+            if (item.cc === popularCurrencies[j]) {
+                isPopular = true;
+                break;
+            }
+        }
+
+        if (isPopular) {
+            popularList.push(item);
+        } else {
+            otherList.push(item);
+        }
     }
 
-    var initialCurrency = 'EUR';
-    if (editTrip && editTrip.currency) {
-        initialCurrency = editTrip.currency;
+    select.innerHTML = '<option value="">Select currency</option>';
+
+    for (var i = 0; i < popularList.length; i++) {
+        var item = popularList[i];
+        var option = document.createElement('option');
+        option.value = item.cc;
+        option.textContent = item.cc + ' - ' + item.name;
+
+        if (editTrip && editTrip.currency === item.cc) {
+            option.selected = true;
+        }
+        select.appendChild(option);
     }
-    select.value = initialCurrency;
+
+    // Add separator line
+    var separator = document.createElement('option');
+    separator.disabled = true;
+    separator.textContent = '---';
+    select.appendChild(separator);
+
+    // Add other currencies
+    for (var i = 0; i < otherList.length; i++) {
+        var item = otherList[i];
+        var option = document.createElement('option');
+        option.value = item.cc;
+        option.textContent = item.cc + ' - ' + item.name;
+
+        // Set selected if editing trip
+        if (editTrip && editTrip.currency === item.cc) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    }
 }
 
 async function loadFriends() {
@@ -95,7 +129,7 @@ async function loadFriends() {
 
         document.querySelectorAll('.friend-item').forEach(item => {
             item.addEventListener('click', () => toggleFriend(item.dataset.username));
-            });
+        });
     } catch (err) {
         console.error('Failed to load friends', err);
     }
@@ -135,7 +169,7 @@ function updateParticipants() {
             </span>
         `;
     }).join('');
-    
+
     participantsList.innerHTML = '<span class="participant-tag">You </span>' + participantsHTML;
 }
 
@@ -196,10 +230,10 @@ async function saveTrip(status) {
     const title = document.getElementById('tripTitle').value.trim();
     const description = document.getElementById('tripDescription').value.trim();
     const budget = parseFloat(document.getElementById('tripBudget').value) || 0;
-    
+
     var currencySelect = document.getElementById('tripCurrency');
     var currency = 'EUR'; // default
-    
+
     if (currencySelect && currencySelect.value) {
         currency = currencySelect.value;
     }
