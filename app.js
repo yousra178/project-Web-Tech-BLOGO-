@@ -5,7 +5,7 @@ const multer = require('multer'); // upload image
 const fs = require('fs');
 const { findUserInfoByUsername, AddUser, DeleteUser, UpdateUser, ValidateLogin } = require('./userController');
 const { addTrip, addTripLocation, editTrip, getTripsForUser,getPublishedTripsForUser, deleteTrip, renameTripsUser, createCollaborativeTrip, getTripDetails, addTripMessage, getTripMessages, getAllTrips } = require('./tripController');
-const { addPost, getPostsForUser, getAllPosts, deletePost, renamePostsUser } = require('./postsController');
+const { addPost, getPostsForUser, getAllPosts, deletePost, renamePostsUser, getRootCommentsForPost, getRepliesForComment, addComment, deleteComment, updateComment, getProfilPictureForPost } = require('./postsController');
 const { followUser, unfollowUser, getFollowerCount, getFollowingCount, isFollowing, isFollowed, renameFollowsUser, listFollowers, listFollowing, getMutualFriends } = require('./followController');
 const { savePostForUser, unsavePostForUser, getSavedPostsForUser, isPostSavedByUser } = require('./bookmarksController');
 
@@ -72,7 +72,16 @@ app.get('/', async (req, res) => {
         // VOEG TOE: Check isSaved voor elke post
         for (let post of posts) {
             post.isSaved = await isPostSavedByUser(currentUser, post.id);
+            // Root comments 
+            post.comments = await getRootCommentsForPost(post.id); 
+            post.profilPic = await getProfilPictureForPost(post.id);
+
+            // Voor elke root comment: replies ophalen 
+            for (let comment of post.comments) { 
+                comment.replies = await getRepliesForComment(comment.id);
+            } 
         }
+
 
         res.render('index', {
             posts,
@@ -81,7 +90,7 @@ app.get('/', async (req, res) => {
         });
     } else {
         // Als niet ingelogd, toon index zonder posts
-        res.render('index', { posts: [] }, { trips: [] });
+        res.render('index', { posts: [] });
     }
 });
 
@@ -453,9 +462,18 @@ app.post('/user/:username/follow', requireAuth, async (req, res) => {
 
 app.get('/user/:username/followers', requireAuth, async (req, res) => {
     const username = req.params.username;
-    const followers = await listFollowers(username);
     const isOwnProfile = req.session.user.username === username;
-    res.render('followers', { username, followers, isOwnProfile });
+
+    const profileUser = await findUserInfoByUsername(username);
+
+    const isPrivate = profileUser?.privacy === 'private';
+    const following = await isFollowing(req.session.user.username, username);
+    const followed = await isFollowed(req.session.user.username, username);
+    const canViewFollowers = isOwnProfile || !isPrivate || (following && followed);
+
+    const followers = canViewFollowers ? await listFollowers(username) : [];
+
+    res.render('followers', { username, followers, isOwnProfile, isPrivate, following, followed});
 });
 
 // Single trip detail page
@@ -470,9 +488,18 @@ app.get('/trip/:id', requireAuth, async (req, res) => {
 
 app.get('/user/:username/following', requireAuth, async (req, res) => {
     const username = req.params.username;
-    const followingList = await listFollowing(username);
     const isOwnProfile = req.session.user.username === username;
-    res.render('following', { username, following: followingList, isOwnProfile });
+
+    const profileUser = await findUserInfoByUsername(username);
+
+    const isPrivate = profileUser?.privacy === 'private';
+    const following = await isFollowing(req.session.user.username, username);
+    const followed = await isFollowed(req.session.user.username, username);
+    const canViewFollowers = isOwnProfile || !isPrivate || (following && followed);
+
+    const followings = canViewFollowers ? await listFollowing(username) : [];
+
+    res.render('following', { username, followings, isOwnProfile, isPrivate, following, followed });
 });
 
 // Pagina om een nieuwe post te maken
@@ -584,6 +611,21 @@ app.get('/api/trips', requireAuth, async (req, res) => {
     res.json(trips);
 });
 
+app.get('/api/trips/user/:username', requireAuth, async function(req, res) {
+    var targetUser = req.params.username;
+    var currentUser = req.session.user.username;
+        var trips;
+        
+        if (currentUser === targetUser) {
+            trips = await getTripsForUser(targetUser);
+        } else {
+            trips = await getPublishedTripsForUser(targetUser);
+        }
+
+        res.json(trips);
+    
+});
+
 app.get('/api/posts', requireAuth, async (req, res) => {
     const username = req.session.user.username;
     const posts = await getAllPosts(username);
@@ -596,6 +638,34 @@ app.get('/api/bookmarks', requireAuth, async (req, res) => {
     res.json(bookmarks);
 });
 
+app.post('/comments/new', requireAuth, async (req, res) => {
+    const postId = req.body.post_id; 
+    const caption = req.body.caption;
+    const username = req.session.user.username; 
+    const parentId = req.body.parent_id;
+      
+      if (!caption || caption.trim() === "") { 
+        return res.redirect(req.get('Referrer')); 
+    }
+
+     await addComment(postId, username, caption , parentId);
+      res.redirect(req.get('Referrer')); 
+});
+
+app.post('/comments/delete', requireAuth, async (req, res) => {
+    const username = req.session.user.username; 
+    const id = req.body.id; console.log("USER:", username);
+     await deleteComment(id, username); 
+    res.redirect(req.get('Referrer'));
+ });
+
+ app.post('/comments/update', requireAuth, async (req, res) => {
+    const username = req.session.user.username; 
+    const id = req.body.id; 
+    const caption = req.body.caption; 
+    const success = await updateComment(id, username, caption); 
+    res.redirect(req.get('Referrer')); 
+});
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
