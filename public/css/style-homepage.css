@@ -1,6 +1,6 @@
  body{
     margin-top: 150px;
-    background-image: url('/img/bg-icons.png');
+     background-image: var(--bg-color);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center top;
